@@ -79,3 +79,14 @@ for new_date in new_dates:
         send_sms(body=msg, recipients=sms_recipients)
     else:
         print('No vaccine appointment links added.')
+
+# Armstrong
+url = 'https://api.appointlet.com/organizations/120454/scheduler'
+resp = requests.get(url)
+import re
+x = re.findall(r'acmh-covid-vaccine.*?}',resp.text, re.DOTALL)
+if 'true' in x:
+    url = 'https://acmh.appointlet.com/'
+    msg = f'From Emilio: Armstrong Hospital COVID Vaccine link: {url}'
+    print(msg)
+    tw.send_sms(body=msg, recipients=recipient_list)
