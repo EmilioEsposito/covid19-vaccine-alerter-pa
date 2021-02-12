@@ -89,4 +89,4 @@ if 'true' in x:
     url = 'https://acmh.appointlet.com/'
     msg = f'From Emilio: Armstrong Hospital COVID Vaccine link: {url}'
     print(msg)
-    tw.send_sms(body=msg, recipients=recipient_list)
+    tw.send_sms(body=msg, recipients=sms_recipients)
