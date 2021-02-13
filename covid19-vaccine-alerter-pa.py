@@ -97,15 +97,16 @@ else:
     # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
 
 # LOGGING
-# Send Emilio a daily text so he knows the script is still running, even if there are no new alerts:
+# keep a a simple log of runtimes
 now = datetime.datetime.now()
+with open('covid19-vaccine-alerter-pa-runtimes.log', 'a') as f:
+    output = str(now) + "\n"
+    f.write(output)
+
+# Send Emilio a daily text so he knows the script is still running, even if there are no new alerts:
 print('Current Time on EC2:',now)
 print(now.hour)
 msg = f'COVID Vaccine Checker still running. Nothing to report.'
 if now.hour==23 and now.minute<=30:
     send_sms(body=msg, recipients=['+14123703550'])
 
-# keep a a simple log of runtimes
-with open('covid19-vaccine-alerter-pa-runtimes.log', 'a') as f:
-    output = str(now) + "\n"
-    f.write(output)
