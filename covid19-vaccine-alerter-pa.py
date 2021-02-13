@@ -5,13 +5,6 @@ import json
 from twilio.rest import Client
 import requests
 
-# Dynamically change the working dir depending on if I'm testing locally or if it's running in prod on AWS EC2
-if os.environ['USER']=='ec2-user': # Production running on AWS ec2
-    os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
-else:   # Dev running locally
-    os.chdir('/Users/eesposito/sandbox')
-    sys.path.append('/Users/eesposito/sandbox')
-
 
 # Import TWILIO account credentials from a twilio_creds.json file. The file contents should look like this:
 # {"TWILIO_AUTH":"XXXXXXXX",
