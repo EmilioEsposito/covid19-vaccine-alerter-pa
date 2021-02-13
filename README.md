@@ -1,4 +1,4 @@
-# covid19-vaccine-alerter-pa
+# COVID19 Vaccine Scheduling Alerter - Allegheny County
 Author: Emilio Esposito
 
 This is a simple python script that will send an SMS text when vaccine appointments in Allegheny County Pennsylvania (and other various PA locations) are available. 
