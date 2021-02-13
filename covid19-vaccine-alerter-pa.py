@@ -6,8 +6,7 @@ from twilio.rest import Client
 import requests
 
 # control the working directory explicitly for the cron job to work properly:
-if os.environ['USER']=='ec2-user':
-    os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
+os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
 
 # Import TWILIO account credentials from a twilio_creds.json file. The file contents should look like this:
 # {"TWILIO_AUTH":"XXXXXXXX",
