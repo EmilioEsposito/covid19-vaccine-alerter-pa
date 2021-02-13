@@ -5,6 +5,9 @@ import json
 from twilio.rest import Client
 import requests
 
+# control the working directory explicitly for the cron job to work properly:
+if os.environ['USER']=='ec2-user':
+    os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
 
 # Import TWILIO account credentials from a twilio_creds.json file. The file contents should look like this:
 # {"TWILIO_AUTH":"XXXXXXXX",
@@ -94,9 +97,16 @@ else:
     send_sms(body=msg, recipients=sms_recipients)
     # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
 
+# LOGGING
 # Send Emilio a daily text so he knows the script is still running, even if there are no new alerts:
 now = datetime.datetime.now()
 print('Current Time on EC2:',now)
+print(now.hour)
 msg = f'COVID Vaccine Checker still running. Nothing to report.'
-if now.hour==23:
+if now.hour==23 and now.minute<=30:
     send_sms(body=msg, recipients=['+14123703550'])
+
+# keep a a simple log of runtimes
+with open('covid19-vaccine-alerter-pa-runtimes.log', 'a') as f:
+    output = str(now) + "\n"
+    f.write(output)
