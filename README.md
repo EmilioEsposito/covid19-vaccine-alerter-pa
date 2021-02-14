@@ -17,4 +17,16 @@ Pull Requests are welcome if you want to improve it or add more sites to scrape.
 
 This script is currently running on AWS EC2 via a cron job that I can set to run every X minutes (currently every 10 minutes). The EC2 instance is owned by my rental business (Sernia Capital LLC), which can bear all hosting/SMS costs (Twilio is relatively cheap, we can handle over 100k messages before the cost would become material).
 
+### Scheduling via Cron
 
+Cron is a simple script scheduler that comes preinstalled on most unix-based systems. 
+
+To add a new cron job, you enter the editor from terminal with this command: 
+
+`crontab -e`
+
+Then add a line like this to schedule it (see https://crontab-generator.org/ for details):
+
+```
+*/10 * * * * source ~/.bash_profile; python /home/ec2-user/covid19-vaccine-alerter-pa/covid19-vaccine-alerter-pa.py
+```
