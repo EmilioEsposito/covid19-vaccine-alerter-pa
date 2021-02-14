@@ -4,6 +4,7 @@ import datetime
 import json
 from twilio.rest import Client
 import requests
+from dateutil import parser
 
 # control the working directory explicitly for the cron job to work properly:
 os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
@@ -29,16 +30,47 @@ account_sid = creds['TWILIO_SID']
 auth_token = creds['TWILIO_AUTH']
 client = Client(account_sid, auth_token)
 
+# COOLOFF PERIOD STATE - Once a text is sent, we don't want to spam them the same message every X minutes.
+# cooloff_period_state=True will suppress SMS messages until the allotted time has passed.
+cooloff_period_state = False
+next_cooloff_period_state = False # this is used to control the cooloff_period_state of the NEXT run
+try:
+    with open('cooloff-until.log','r') as f:
+        cooloff_time_str = f.read()
+    cooloff_time = parser.parse(cooloff_time_str)
+    if datetime.datetime.now()<cooloff_time:
+        cooloff_period_state = True
+except:
+    print('Probably File not Found Error. This could be handled better.')
+
+
 # define simple function that will send a SMS to each of the recipients in the sms_recipients list
-def send_sms(body='', recipients=[]):
-    print(f'Sending SMS: {msg}')
-    for recipient in recipients:
+def send_sms(body='', recipients=[], trigger_next_cooloff_period=True):
+
+    if cooloff_period_state:
+        msg='Covid Alert Cooloff period triggered. No SMS sent.'
+        print(msg)
         message = client.messages.create(
             messaging_service_sid=creds['MESSAGING_SID'],
-            body=body,
-            to=recipient
+            body=msg,
+            to=['+14123703550']
         )
         print(message.sid)
+
+    else:
+        print(f'Sending SMS: {msg}')
+        for recipient in recipients:
+            message = client.messages.create(
+                messaging_service_sid=creds['MESSAGING_SID'],
+                body=body,
+                to=recipient
+            )
+            print(message.sid)
+
+    # The state can only be flipped to True and cannot be flipped back during a run
+    global next_cooloff_period_state
+    if trigger_next_cooloff_period:
+        next_cooloff_period_state = True
 
 
 # Site 1: Allegheny County Health Department
@@ -108,5 +140,10 @@ print('Current Time on EC2:',now)
 print(now.hour)
 msg = f'COVID Vaccine Checker still running. Nothing to report.'
 if now.hour==23 and now.minute<=30:
-    send_sms(body=msg, recipients=['+14123703550'])
+    send_sms(body=msg, recipients=['+14123703550'], trigger_next_cooloff_period=False)
 
+# Cooloff period file reset
+if next_cooloff_period_state:
+    three_hours_from_now = now+datetime.timedelta(hours=3)
+    with open('cooloff-until.log','w') as f:
+        f.write(str(three_hours_from_now))
