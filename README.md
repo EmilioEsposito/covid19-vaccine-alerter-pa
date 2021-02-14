@@ -28,5 +28,5 @@ To add a new cron job, you enter the editor from terminal with this command:
 Then add a line like this to schedule it (see https://crontab-generator.org/ for details):
 
 ```
-*/10 * * * * source ~/.bash_profile; python /home/ec2-user/covid19-vaccine-alerter-pa/covid19-vaccine-alerter-pa.py
+*/10 * * * * python /home/ec2-user/covid19-vaccine-alerter-pa/covid19-vaccine-alerter-pa.py
 ```
