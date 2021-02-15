@@ -48,17 +48,17 @@ except:
 def send_sms(body='', recipients=[], trigger_next_cooloff_period=True):
 
     if cooloff_period_state:
-        msg='Covid Alert Cooloff period triggered. No SMS sent.'
-        print(msg)
+        body='Covid Alert Cooloff period triggered. No SMS sent.'
+        print(body)
         message = client.messages.create(
             messaging_service_sid=creds['MESSAGING_SID'],
-            body=msg,
+            body=body,
             to=['+14123703550']
         )
         print(message.sid)
 
     else:
-        print(f'Sending SMS: {msg}')
+        print(f'Sending SMS: {body}')
         for recipient in recipients:
             message = client.messages.create(
                 messaging_service_sid=creds['MESSAGING_SID'],
