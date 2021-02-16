@@ -7,7 +7,7 @@ Currently, the script scrapes the following sites to check for vaccine appointme
 
 * [Allegheny County Health Department](https://www.alleghenycounty.us/Health-Department/Resources/COVID-19/COVID-19-Vaccine-Information.aspx)
 * [Armstrong Center for Medicine & Health](https://acmh.appointlet.com/)
-* [RiteAid](https://sr.reportsonline.com/sr/riteaid/PS2021)
+* [Giant Eagle](https://sr.reportsonline.com/sr/gianteagle/immunizations)
 
 **Disclaimer: Please don't rely on this as your only source of trying to schedule a vaccine appointment. I'm trying to keep it as up to date as possible but the landscape is changing very quickly. Please still consult the PA state website regularly:**
 

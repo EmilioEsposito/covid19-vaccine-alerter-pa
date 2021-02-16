@@ -16,7 +16,7 @@ os.chdir('/home/ec2-user/covid19-vaccine-alerter-pa')
 with open('twilio_creds.json','r') as f:
     creds = json.load(f)
 
-# Load a list of SMS recipients. The file format should look like this:
+# Load a list of SMS recipients from a sms_recipients.json file. The file format should look like this:
 # ["+1412555666",
 # "+1412555777",
 # "+1412555888",
@@ -92,7 +92,7 @@ new_dates = [
 ]
 
 for new_date in new_dates:
-    msg = f'From Emilio: Potential vaccine available! Allegheny Health scheduling link for {new_date} was just added: {url}'
+    msg = f'From Emilio Vaccine Alert: Potential vaccine appt available from Allegheny Health for {new_date} was just added: {url}'
     if new_date in resp.text:
         send_sms(body=msg, recipients=sms_recipients)
     # else:
@@ -106,27 +106,47 @@ import re
 x = re.findall(r'acmh-covid-vaccine.*?}',resp.text, re.DOTALL)
 if 'true' in x:
     url = 'https://acmh.appointlet.com/'
-    msg = f'From Emilio: Armstrong Hospital COVID Vaccine link: {url}'
+    msg = f'From Emilio Vaccine Alert: Armstrong Hospital appointments may now be available: {url}'
     print(msg)
     send_sms(body=msg, recipients=sms_recipients)
 
-# Site 3: Riteaid
-print('Checking Riteaid')
-url = 'https://sr.reportsonline.com/sr/riteaid/PS2021'
+
+# Site 3: Giant Eagle
+print('Checking Giant Eagle')
+url = 'https://sr.reportsonline.com/sr/gianteagle/immunizations'
 resp = requests.get(url)
-no_vaccine_msg = 'There are currently no COVID vaccine appointments available. Please check back tomorrow as we continue to add availability.'
+no_vaccine_msg = 'There are currently no COVID-19 vaccine appointments available'
 waiting_page = 'Your estimated wait time is:'
 event_ended = 'The event has ended'
 if no_vaccine_msg in resp.text:
-    print('RiteAid '+no_vaccine_msg)
-elif waiting_page in resp.text:
-    print('RiteAid '+waiting_page)
+    print('Giant Eagle '+no_vaccine_msg)
+# elif waiting_page in resp.text:
+#     print('Giant Eagle '+waiting_page)
 elif event_ended in resp.text:
-    print('RiteAid '+event_ended)
+    print('Giant Eagle '+event_ended)
 else:
-    msg = f'From Emilio: Potential vaccine appt available at RiteAid: {url}'
+    msg = f'From Emilio Vaccine Alert: Some appointments may have just opened at Giant Eagle: {url}'
     send_sms(body=msg, recipients=sms_recipients)
     # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
+
+
+# Site 4: Riteaid
+# print('Checking Riteaid')
+# url = 'https://sr.reportsonline.com/sr/riteaid/PS2021'
+# resp = requests.get(url)
+# no_vaccine_msg = 'There are currently no COVID vaccine appointments available. Please check back tomorrow as we continue to add availability.'
+# waiting_page = 'Your estimated wait time is:'
+# event_ended = 'The event has ended'
+# if no_vaccine_msg in resp.text:
+#     print('RiteAid '+no_vaccine_msg)
+# elif waiting_page in resp.text:
+#     print('RiteAid '+waiting_page)
+# elif event_ended in resp.text:
+#     print('RiteAid '+event_ended)
+# else:
+#     msg = f'From Emilio Vaccine Alert: Potential vaccine appt available at RiteAid: {url}'
+#     send_sms(body=msg, recipients=sms_recipients)
+#     # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
 
 # LOGGING
 # keep a a simple log of runtimes
