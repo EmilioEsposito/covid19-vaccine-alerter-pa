@@ -112,22 +112,22 @@ if 'true' in x:
 
 
 # Site 3: Giant Eagle
-print('Checking Giant Eagle')
-url = 'https://sr.reportsonline.com/sr/gianteagle/immunizations'
-resp = requests.get(url)
-no_vaccine_msg = 'There are currently no COVID-19 vaccine appointments available'
-waiting_page = 'Your estimated wait time is:'
-event_ended = 'The event has ended'
-if no_vaccine_msg in resp.text:
-    print('Giant Eagle '+no_vaccine_msg)
-# elif waiting_page in resp.text:
-#     print('Giant Eagle '+waiting_page)
-elif event_ended in resp.text:
-    print('Giant Eagle '+event_ended)
-else:
-    msg = f'From Emilio Vaccine Alert: Some appointments may have just opened at Giant Eagle: {url}'
-    send_sms(body=msg, recipients=sms_recipients)
-    # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
+# print('Checking Giant Eagle')
+# url = 'https://sr.reportsonline.com/sr/gianteagle/immunizations'
+# resp = requests.get(url)
+# no_vaccine_msg = 'There are currently no COVID-19 vaccine appointments available'
+# waiting_page = 'Your estimated wait time is:'
+# event_ended = 'The event has ended'
+# if no_vaccine_msg in resp.text:
+#     print('Giant Eagle '+no_vaccine_msg)
+# # elif waiting_page in resp.text:
+# #     print('Giant Eagle '+waiting_page)
+# elif event_ended in resp.text:
+#     print('Giant Eagle '+event_ended)
+# else:
+#     msg = f'From Emilio Vaccine Alert: Some appointments may have just opened at Giant Eagle: {url}'
+#     send_sms(body=msg, recipients=sms_recipients)
+#     # send_sms(body='Prior text was a false alarm.', recipients=sms_recipients)
 
 
 # Site 4: Riteaid
