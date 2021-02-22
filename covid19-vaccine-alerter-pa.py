@@ -60,12 +60,16 @@ def send_sms(body='', recipients=[], trigger_next_cooloff_period=True):
     else:
         print(f'Sending SMS: {body}')
         for recipient in recipients:
-            message = client.messages.create(
-                messaging_service_sid=creds['MESSAGING_SID'],
-                body=body,
-                to=recipient
-            )
-            print(message.sid)
+            try:
+                message = client.messages.create(
+                    messaging_service_sid=creds['MESSAGING_SID'],
+                    body=body,
+                    to=recipient
+                )
+                print(message.sid)
+            except:
+                print("Failed:", recipient)
+
 
     # The state can only be flipped to True and cannot be flipped back during a run
     global next_cooloff_period_state
@@ -82,8 +86,9 @@ resp = requests.get(url)
 new_dates = [
 # 'January 29', 'January 31', 'February 4', 'February 5', 'February 6', 'February 7', 'February 8', 'February 14',
 # 'February 15','February 16', 'February 17', 'February 18', 'February 19',
-'February 20', 'February 21', 'February 22',
-'February 23', 'February 24', 'February 25', 'February 26', 'February 27', 'February 28', 'February 29',
+# 'February 20', 'February 21', 'February 22',
+# 'February 23', 'February 24', 'February 25', 'February 26',
+'February 27', 'February 28', 'February 29',
 'March 1 ', 'March 2 ', 'March 1,', 'March 2,', 'March 1.', 'March 2.',
 'March 3', 'March 4', 'March 5', 'March 6', 'March 7', 'March 8', 'March 9',
 'March 10', 'March 11', 'March 12', 'March 13', 'March 14', 'March 15', 'March 16',
@@ -158,8 +163,8 @@ with open('covid19-vaccine-alerter-pa-runtimes.log', 'a') as f:
 # Send Emilio a daily text so he knows the script is still running, even if there are no new alerts:
 print('Current Time on EC2:',now)
 print(now.hour)
-msg = f'COVID Vaccine Checker still running. Nothing to report.'
-if now.hour==23 and now.minute<=30:
+msg = f'COVID Vaccine Checker still running.'
+if now.hour==22 and now.minute<=10:
     send_sms(body=msg, recipients=['+14123703550'], trigger_next_cooloff_period=False)
 
 # Cooloff period file reset
